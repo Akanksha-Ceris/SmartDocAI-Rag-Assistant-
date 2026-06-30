@@ -23,6 +23,7 @@ from langchain_core.runnables import RunnablePassthrough
 # ── Load environment variables ──────────────────────────────────────────────
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+st.write("API Key Found:", bool(GOOGLE_API_KEY))
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
