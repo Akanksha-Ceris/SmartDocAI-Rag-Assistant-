@@ -1,1 +1,51 @@
 
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+
+# Load dataset
+iris = load_iris()
+X = iris.data
+
+# Standardize data
+X_scaled = StandardScaler().fit_transform(X)
+
+# K-Means clustering
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+clusters = kmeans.fit_predict(X_scaled)
+
+print("K-Means Silhouette Score:",
+      round(silhouette_score(X_scaled, clusters), 3))
+
+# Hierarchical clustering
+hierarchical = AgglomerativeClustering(n_clusters=3)
+h_clusters = hierarchical.fit_predict(X_scaled)
+
+print("Hierarchical Silhouette Score:",
+      round(silhouette_score(X_scaled, h_clusters), 3))
+
+# PCA dimensionality reduction
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# Plot clusters
+plt.figure(figsize=(8, 5))
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=clusters)
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+plt.title("Iris Dataset - K-Means Clustering")
+plt.show()
+
+# Save results
+results = pd.DataFrame(X, columns=iris.feature_names)
+results["Cluster"] = clusters
+results.to_csv("iris_clustering_results.csv", index=False)
+
+print("Project completed!")
+print("Results saved to iris_clustering_results.csv")
